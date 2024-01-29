@@ -5,14 +5,19 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./components/theme/theme-provider";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <HelmetProvider>
       <ThemeProvider storageKey="foodshop-theme" defaultTheme="dark">
-        <Toaster richColors />
-        <Helmet titleTemplate="%s | foods" />
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <Toaster richColors />
+          <Helmet titleTemplate="%s | foods" />
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </ThemeProvider>
     </HelmetProvider>
   );

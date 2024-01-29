@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -6,9 +7,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { signIn } from "@/api/sign-in";
 
 const signInForm = z.object({
   email: z.string().email(),
+  password: z.string(),
 });
 
 type SignInForm = z.infer<typeof signInForm>;
@@ -19,11 +22,13 @@ export function Login() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignInForm>();
-
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn,
+  });
   async function handleSignIn(data: SignInForm) {
     try {
       console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await authenticate({ username: data.email, password: data.password });
       toast.success("Voce vai receber um email", {
         action: {
           label: "Reenviar",
@@ -34,6 +39,7 @@ export function Login() {
       toast.error("Credenciais inválidas");
     }
   }
+
   return (
     <div>
       <Helmet title="Sign in" />
@@ -55,6 +61,10 @@ export function Login() {
             <div className="space-y-2">
               <Label htmlFor="email">Digite seu e-mail</Label>
               <Input {...register("email")} id="email" type="email" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Digite sua senha</Label>
+              <Input {...register("password")} id="password" type="text" />
             </div>
             <Button className="w-full" type="submit" disabled={isSubmitting}>
               Acessar painel

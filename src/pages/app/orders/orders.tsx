@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,8 +14,14 @@ import { Helmet } from "react-helmet-async";
 import { OrderTableRow } from "./order-table-row";
 import { OrderTableFilters } from "./order-table-filters";
 import { Pagination } from "@/components/pagination";
+import { checkStatus } from "@/api/sign-in";
 
 export function OrderList() {
+  const { data: statusResponse, isLoading } = useQuery({
+    queryKey: ["status"],
+    queryFn: checkStatus,
+  });
+
   return (
     <>
       <Helmet title="Pedidos" />
