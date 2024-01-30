@@ -17,13 +17,11 @@ function EmailConfirmed() {
   });
 
   const verifyUserEmail = async () => {
-    console.log(token);
-    await confirmUserEmail(JSON.stringify(token));
+    const status = await confirmEmail(JSON.stringify(token));
   };
 
   useEffect(() => {
-    verifyUserEmail();
-    navigate("/");
+    console.log(confirmUserEmail);
   }, [isLoading]);
 
   return (

@@ -6,12 +6,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createCompany } from "@/api/sign-up";
 
 const signUpForm = z.object({
   companyName: z.string(),
   managerName: z.string(),
-  phone: z.string(),
-  email: z.string().email(),
+  managerEmail: z.string().email(),
+  companyPhone: z.string(),
+  password: z.string(),
 });
 
 type SignUpForm = z.infer<typeof signUpForm>;
@@ -25,10 +28,14 @@ export function SignUp() {
     formState: { isSubmitting },
   } = useForm<SignUpForm>();
 
+  const { mutateAsync: createCompanyRequest } = useMutation({
+    mutationFn: createCompany,
+  });
+
   async function handleSignUp(data: SignUpForm) {
     try {
       console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await createCompanyRequest(data);
       toast.success("Estabelecimento cadastrado com sucesso!", {
         action: {
           label: "Login",
@@ -77,12 +84,17 @@ export function SignUp() {
 
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input {...register("email")} id="email" type="email" />
+              <Input {...register("managerEmail")} id="email" type="email" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
-              <Input {...register("phone")} id="phone" type="tel" />
+              <Input {...register("companyPhone")} id="phone" type="tel" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Sua senha</Label>
+              <Input {...register("password")} id="password" type="password" />
             </div>
 
             <Button className="w-full" type="submit" disabled={isSubmitting}>

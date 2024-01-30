@@ -7,8 +7,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 export function AccountMenu() {
+  const navigate = useNavigate();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -31,7 +33,14 @@ export function AccountMenu() {
             <span>Perfil da Loja</span>
           </DropdownMenuItem>
           <DropdownMenuItem className="text-rose-500 dark:text-rose-400">
-            <LogOut className="mr-2 w-6" />
+            <Button asChild variant={"ghost"}>
+              <LogOut
+                className="mr-2 w-6"
+                onClick={() => {
+                  localStorage.clear(), navigate("/sign-in");
+                }}
+              />
+            </Button>
             <span>Sair</span>
           </DropdownMenuItem>
         </DropdownMenuContent>

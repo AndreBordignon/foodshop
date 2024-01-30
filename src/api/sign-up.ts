@@ -1,23 +1,28 @@
 import { api } from "@/lib/axios";
 
-export interface SignInBody {
-  username: string;
+export interface SignUpBody {
+  companyName: string;
+  managerName: string;
+  managerEmail: string;
+  companyPhone: string;
+  isActive?: boolean;
   password: string;
 }
 export type StatusResponse = {
-  id: string;
-  email: string;
-  password: string;
+  id: number;
+  companyName: string;
+  managerName: string;
+  managerEmail: string;
+  companyPhone: string;
   isActive: boolean;
-  firstName: string;
-  lastName: string;
+  password: string;
 };
 
 export type ConfirmEmailResponse = {
   data: any;
 };
-export async function signIn({ username, password }: SignInBody) {
-  const res = await api.post("/auth/login", { username, password });
+export async function createCompany(company: SignUpBody) {
+  const res = await api.post("/restaurants", company);
 
   return res;
 }

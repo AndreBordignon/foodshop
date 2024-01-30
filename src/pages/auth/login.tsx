@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "@/api/sign-in";
 
 const signInForm = z.object({
@@ -22,13 +22,20 @@ export function Login() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignInForm>();
+  const navigate = useNavigate();
   const { mutateAsync: authenticate } = useMutation({
     mutationFn: signIn,
   });
   async function handleSignIn(data: SignInForm) {
     try {
-      console.log(data);
-      await authenticate({ username: data.email, password: data.password });
+      const response = await authenticate({
+        username: data.email,
+        password: data.password,
+      });
+      if (response.data.status === "ok") {
+        navigate("/orders");
+        return;
+      }
       toast.success("Voce vai receber um email", {
         action: {
           label: "Reenviar",

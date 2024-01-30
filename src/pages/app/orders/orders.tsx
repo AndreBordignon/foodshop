@@ -17,9 +17,10 @@ import { Pagination } from "@/components/pagination";
 import { checkStatus } from "@/api/sign-in";
 
 export function OrderList() {
+  const token = localStorage.getItem("access_token");
   const { data: statusResponse, isLoading } = useQuery({
     queryKey: ["status"],
-    queryFn: checkStatus,
+    queryFn: () => checkStatus(),
   });
 
   return (
