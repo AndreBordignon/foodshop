@@ -2,12 +2,20 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createCompany } from "@/api/sign-up";
+
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 const signUpForm = z.object({
   companyName: z.string(),
@@ -15,6 +23,13 @@ const signUpForm = z.object({
   managerEmail: z.string().email(),
   companyPhone: z.string(),
   password: z.string(),
+  file: z
+    .any()
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported.",
+    ),
 });
 
 type SignUpForm = z.infer<typeof signUpForm>;
@@ -24,7 +39,9 @@ export function SignUp() {
 
   const {
     register,
+    control,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = useForm<SignUpForm>();
 
@@ -34,8 +51,14 @@ export function SignUp() {
 
   async function handleSignUp(data: SignUpForm) {
     try {
-      console.log(data);
-      await createCompanyRequest(data);
+      const formData = new FormData();
+      formData.append("file", data.file);
+      formData.append("companyName", data.companyName);
+      formData.append("companyPhone", data.companyPhone);
+      formData.append("managerEmail", data.managerEmail);
+      formData.append("managerName", data.managerName);
+      formData.append("password", data.password);
+      await createCompanyRequest(formData);
       toast.success("Estabelecimento cadastrado com sucesso!", {
         action: {
           label: "Login",
@@ -64,6 +87,32 @@ export function SignUp() {
           </div>
 
           <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="file">Picture</Label>
+              <Controller
+                control={control}
+                name="file"
+                rules={{ required: "Recipe picture is required" }}
+                render={({ field: { onChange, onBlur, name, ref } }) => (
+                  <Input
+                    onBlur={onBlur}
+                    name={name}
+                    ref={ref}
+                    type="file"
+                    id="picture"
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      if (files && files.length > 0) {
+                        console.log(files);
+                        // Atualiza o valor do campo de arquivo no React Hook Form
+                        onChange(files[0]);
+                      }
+                    }}
+                  />
+                )}
+              />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="companyName">Nome da empresa</Label>
               <Input

@@ -7,6 +7,7 @@ export interface SignUpBody {
   companyPhone: string;
   isActive?: boolean;
   password: string;
+  file?: any;
 }
 export type StatusResponse = {
   id: number;
@@ -21,7 +22,7 @@ export type StatusResponse = {
 export type ConfirmEmailResponse = {
   data: any;
 };
-export async function createCompany(company: SignUpBody) {
+export async function createCompany(company: any) {
   const res = await api.post("/restaurants", company);
 
   return res;
