@@ -7,10 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardSkeleton } from "./card-skeleton";
 
 export function UsersReceiptCard() {
-  //   const { data: usersReceipt, isFetching: isLoadingUsersReceipt } = useQuery({
-  //     queryKey: ['metrics', 'month-receipt'],
-  //     queryFn: getUsersReceipt,
-  //   })
   const usersReceipt = {
     receipt: 40000,
     diffFromLastMonth: 20,
