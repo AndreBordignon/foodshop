@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
 
 export interface SignUpBody {
-  companyName: string;
+  name: string;
   managerName: string;
   managerEmail: string;
   companyPhone: string;
@@ -11,7 +11,7 @@ export interface SignUpBody {
 }
 export type StatusResponse = {
   id: number;
-  companyName: string;
+  name: string;
   managerName: string;
   managerEmail: string;
   companyPhone: string;

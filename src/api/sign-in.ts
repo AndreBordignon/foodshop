@@ -32,3 +32,9 @@ export async function confirmEmail(access_token: string): Promise<any> {
 
   return res;
 }
+
+export async function signOut() {
+  const res = await api.post("/auth/signout");
+
+  return res;
+}

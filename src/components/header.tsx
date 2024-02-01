@@ -5,6 +5,7 @@ import { ThemeToggle } from "./theme/theme-toggle";
 import { AccountMenu } from "./account-menu";
 
 export function Header() {
+  const urlParams = location.search;
   return (
     <div className="border-b">
       <div className="flex h-16 items-center gap-6 px-6">
@@ -12,11 +13,11 @@ export function Header() {
         <Separator orientation="vertical" className="h-6" />
 
         <nav className="align-center flex space-x-5 lg:space-x-6">
-          <NavLink to="/">
+          <NavLink to={`/${urlParams}`}>
             <Home className="h-4 w-5" />
             Início
           </NavLink>
-          <NavLink to="/orders">
+          <NavLink to={`/orders${urlParams}`}>
             <UtensilsCrossed className="h-4 w-5" />
             Pedidos
           </NavLink>

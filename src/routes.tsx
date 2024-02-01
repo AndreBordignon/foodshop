@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Dashboard } from "./pages/app/dashboard";
+import { Dashboard } from "./pages/app/dashboard/dashboard";
 import { Login } from "./pages/auth/login";
 import { SignUp } from "./pages/auth/sign-up";
 import { AppLayout } from "./pages/_layouts/app";

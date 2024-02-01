@@ -22,6 +22,7 @@ export function Login() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignInForm>();
+
   const navigate = useNavigate();
   const { mutateAsync: authenticate } = useMutation({
     mutationFn: signIn,
@@ -33,7 +34,7 @@ export function Login() {
         password: data.password,
       });
       if (response.data.status === "ok") {
-        navigate("/orders");
+        navigate("/");
         return;
       }
       toast.success("Voce vai receber um email", {
@@ -71,7 +72,7 @@ export function Login() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Digite sua senha</Label>
-              <Input {...register("password")} id="password" type="text" />
+              <Input {...register("password")} id="password" type="password" />
             </div>
             <Button className="w-full" type="submit" disabled={isSubmitting}>
               Acessar painel

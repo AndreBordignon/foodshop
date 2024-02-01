@@ -11,7 +11,6 @@ export function AppLayout() {
       (response: AxiosResponse) => response,
       (error: { response: { status: any; data: { code: any } } }) => {
         if (isAxiosError(error)) {
-          console.log(error);
           const status = error.response?.status;
           const code = error.response?.data.message;
 

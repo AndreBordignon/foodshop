@@ -18,10 +18,10 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 const signUpForm = z.object({
-  companyName: z.string(),
+  name: z.string(),
   managerName: z.string(),
   managerEmail: z.string().email(),
-  companyPhone: z.string(),
+  phone: z.string(),
   password: z.string(),
   file: z
     .any()
@@ -53,8 +53,8 @@ export function SignUp() {
     try {
       const formData = new FormData();
       formData.append("file", data.file);
-      formData.append("companyName", data.companyName);
-      formData.append("companyPhone", data.companyPhone);
+      formData.append("name", data.name);
+      formData.append("phone", data.phone);
       formData.append("managerEmail", data.managerEmail);
       formData.append("managerName", data.managerName);
       formData.append("password", data.password);
@@ -114,12 +114,8 @@ export function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="companyName">Nome da empresa</Label>
-              <Input
-                {...register("companyName")}
-                id="companyName"
-                type="text"
-              />
+              <Label htmlFor="name">Nome da empresa</Label>
+              <Input {...register("name")} id="name" type="text" />
             </div>
 
             <div className="space-y-2">
@@ -138,7 +134,7 @@ export function SignUp() {
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
-              <Input {...register("companyPhone")} id="phone" type="tel" />
+              <Input {...register("phone")} id="phone" type="tel" />
             </div>
 
             <div className="space-y-2">
