@@ -23,7 +23,7 @@ export type ConfirmEmailResponse = {
   data: any;
 };
 export async function createCompany(company: any) {
-  const res = await api.post("/restaurants", company);
+  const res = await api.post("/stores", company);
 
   return res;
 }

@@ -24,7 +24,7 @@ import { getUserInfo } from "@/api/user-account";
 import { useEffect, useLayoutEffect } from "react";
 
 import { useSearchParams } from "react-router-dom";
-import { getSelectedRestaurant } from "@/api/restaurant-info";
+import { getSelectedStore } from "@/api/store-info";
 import {
   Dialog,
   DialogContent,
@@ -38,7 +38,7 @@ export function AccountMenu() {
   const navigate = useNavigate();
   let [searchParams, setSearchParams] = useSearchParams();
   const dialog = searchParams.get("dialog");
-  const restaurantId = searchParams.get("restaurant");
+  const storeId = searchParams.get("store");
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ["user"],
@@ -48,18 +48,13 @@ export function AccountMenu() {
     mutationFn: signOut,
   });
 
-  const { data: userSelectedRestaurant, isLoading: isLoadingRestaurant } =
-    useQuery({
-      queryKey: ["get-selected-restaurant", restaurantId],
-      queryFn: () => getSelectedRestaurant(Number(restaurantId)),
-    });
+  const { data: userSelectedStore, isLoading: isLoadingStore } = useQuery({
+    queryKey: ["get-selected-store", storeId],
+    queryFn: () => getSelectedStore(Number(storeId)),
+  });
   useEffect(() => {
-    if (
-      user?.restaurants &&
-      user?.restaurants.length > 0 &&
-      !userSelectedRestaurant
-    ) {
-      setSearchParams({ restaurant: user.restaurants[0].id });
+    if (user?.stores && user?.stores.length > 0 && !userSelectedStore) {
+      setSearchParams({ store: user.stores[0].id });
     }
   }, [user]);
 
@@ -71,12 +66,12 @@ export function AccountMenu() {
             <div className="flex select-none items-center justify-end gap-2">
               <img
                 src={
-                  userSelectedRestaurant?.image_url ||
-                  "https://dummyimage.com/800x800/bababa/000000.png&text=restaurant+not+found"
+                  userSelectedStore?.image_url ||
+                  "https://dummyimage.com/800x800/bababa/000000.png&text=store+not+found"
                 }
                 className="h-[30px] w-[30px] rounded-full"
               />
-              {userSelectedRestaurant?.name?.split("-")[0] || ""}
+              {userSelectedStore?.name?.split("-")[0] || ""}
               <ChevronDown className="h-4 w-4" />
             </div>
           </DropdownMenuTrigger>
@@ -125,7 +120,7 @@ export function AccountMenu() {
                   variant={"ghost"}
                 >
                   <Utensils className="mr-2 w-4" />
-                  Trocar de Restaurante
+                  Trocar de loja
                 </Button>
               </DialogTrigger>
             </DropdownMenuItem>
@@ -145,15 +140,15 @@ export function AccountMenu() {
             <DialogTitle>Trocar loja selecionada</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            {user?.restaurants?.map((restaurant) => (
+            {user?.stores?.map((store) => (
               <Button
                 className="items-left relative flex h-[50px] cursor-pointer justify-between"
-                key={restaurant.id}
+                key={store.id}
                 variant={"ghost"}
                 onClick={() => {
                   setSearchParams((searchParams) => {
                     // Add the new query param value to the queryString
-                    searchParams.set("restaurant", restaurant.id);
+                    searchParams.set("store", store.id);
                     searchParams.delete("dialog");
                     return searchParams;
                   });
@@ -162,14 +157,14 @@ export function AccountMenu() {
                 <div className="flex w-[256px] items-center">
                   <img
                     src={
-                      restaurant.image_url ||
-                      "https://dummyimage.com/800x800/bababa/000000.png&text=restaurant+not+found"
+                      store.image_url ||
+                      "https://dummyimage.com/800x800/bababa/000000.png&text=store+not+found"
                     }
                     className="mr-4 h-[40px] w-[40px] rounded-full"
                   />
-                  {restaurant.name}
+                  {store.name}
                 </div>
-                {restaurantId == restaurant.id && (
+                {storeId == store.id && (
                   <CheckCircle2Icon className="text-green-500" />
                 )}
               </Button>

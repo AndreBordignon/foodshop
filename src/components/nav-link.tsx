@@ -1,14 +1,16 @@
-import { Link, LinkProps, useLocation } from "react-router-dom";
+import { ComponentProps } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-export type NavLinkProps = LinkProps;
+export function NavLink(props: any) {
+  const currentPath = location.pathname;
 
-export function NavLink(props: NavLinkProps) {
-  const { pathname } = useLocation();
+  // Comparação opcionalmente sem parâmetros de consulta
+
   return (
     <Link
-      data-current={pathname === props.to}
-      className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground data-[current=true]:text-foreground"
       {...props}
+      data-current={currentPath === props.to.split("?")[0]}
+      className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[current=true]:text-red-700"
     />
   );
 }
